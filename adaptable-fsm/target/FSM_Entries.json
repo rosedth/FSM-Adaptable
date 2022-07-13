@@ -1,0 +1,23 @@
+[
+	{
+		"entry": "a",
+		"eventClass":"AEvent",
+		"eventName":"AEvent"
+	},
+	{
+		"entry": "b",	
+		"eventClass":"BEvent",
+		"eventName":"BEvent"
+	},
+	{
+		"entry": "c",
+		"eventClass":"CEvent",
+		"eventName":"CEvent"
+	},
+	{
+		"entry": "t",
+		"eventClass":"NNEvent",
+		"eventName":"TEvent"
+	}
+	
+]
