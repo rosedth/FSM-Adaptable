@@ -117,7 +117,7 @@ public class RecognizerFSM {
          * Load the accepted entries for FSM from JSON
          */
 		objectMapper = new ObjectMapper();
-		file=new File("target/FSM_Entries.json");
+		file=new File("FSM_Entries.json");
 		try {
 			load_FSMEntry();
 		} catch (IOException e) {

@@ -38,11 +38,11 @@ digraph G {
 
   o [style=solid,color=black,fillcolor=black,shape=point];
 
-  P[fillcolor="#a9d18e"];
+  P;
 
   Q;
 
-  R[shape = doublecircle];
+  R[shape = doublecircle,fillcolor="#a9d18e"];
 
   S;
 
@@ -50,17 +50,17 @@ digraph G {
 
   o -> S;
 
-  Q -> P [color="#a9d18e",label = a];
+  P -> P [label = a];
+
+  Q -> P [label = a];
 
   P -> Q [label = b];
-
-  P -> P [label = a];
 
   S -> Q [label = b];
 
   {rank=same
 
-  Q -> R [label = c];
+  Q -> R [color="#a9d18e",label = c];
 
   Q -> R [label = b];
 
