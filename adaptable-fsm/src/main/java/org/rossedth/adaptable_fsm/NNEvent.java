@@ -7,7 +7,7 @@ public class NNEvent extends AbstractEvent {
         super("NNEvent");
     }
 
-    protected NNEvent(String name) {
+    public NNEvent(String name) {
         super(name);
     }
 
