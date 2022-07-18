@@ -154,7 +154,7 @@ public class RecognizerFSM {
 		if(event!=null) {
 			if (transitionExists(fsm.getCurrentState(), event)) {           
 				fsm.fire(event);
-				path=buildPath(event);     
+				buildPath(event);
 				System.out.println("Processed sequence: "+ path);  
 			}
 			else
@@ -177,18 +177,20 @@ public class RecognizerFSM {
 	
 	public boolean transitionExists(State s, AbstractEvent event) {
 		boolean exists=false;
+		String label="";
 		Set<Transition> transitions = fsm.getTransitions();
-	    for (Transition transition : transitions) {
-	    	if (
-	    			fsm.getCurrentState().equals(transition.getSourceState()) && //fsm is in the right state as expected by transition definition
-	                transition.getEventType().equals(event.getClass())//fired event type is as expected by transition definition
-	            ) {
-	    		exists=true;
-	            break;
-	    	} 
-	    }
+		for (Transition transition : transitions) {
+			label=transition.getName().substring(transition.getName().indexOf("with")+5);
+			if (fsm.getCurrentState().equals(transition.getSourceState()) && //fsm is in the right state as expected by transition definition
+					transition.getEventType().equals(event.getClass())&&//fired event type is as expected by transition definition
+					label.equalsIgnoreCase(""+event.getName().charAt(0))) {
+				exists=true;
+				break;
+			}
+		} 
 		return exists;
 	}
+	
 	
 	public  boolean acceptedFSMEntry(String entry) {
 		boolean isAccepted=false;
@@ -299,7 +301,7 @@ public class RecognizerFSM {
 		genGraph(gv);		
 	}
 
-	public String buildPath(AbstractEvent e) {
+	public void buildPath(AbstractEvent e) {
 		String separator;
 		if (path.isEmpty()){
 			separator= " ";
@@ -307,8 +309,16 @@ public class RecognizerFSM {
 		else {
 			separator="-";
 		}
-		return  path+separator+e.getName().charAt(0);
-	}	
+		path=path+separator+e.getName().charAt(0);
+	}
+	
+	public void setPath(String path) {
+		this.path=path;
+	}
+	
+	public String getPath() {
+		return path;
+	}
 	
 	/*
 	 * Additional sensors for required events 
