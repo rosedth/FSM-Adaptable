@@ -50,19 +50,19 @@ digraph G {
 
   o -> S;
 
-  P -> P [label = a];
+  S -> Q [label = b];
 
   Q -> P [label = a];
 
-  P -> Q [label = b];
+  P -> P [label = a];
 
-  S -> Q [label = b];
+  P -> Q [label = b];
 
   {rank=same
 
-  Q -> R [color="#a9d18e",label = c];
+  Q -> R [label = c];
 
-  Q -> R [label = b];
+  Q -> R [color="#a9d18e",label = b];
 
   }
 
