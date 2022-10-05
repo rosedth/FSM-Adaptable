@@ -15,23 +15,34 @@ public class AListener {
 	
 	public void setSys_U(RecognizerFSM recognizer) {
 		this.sys_U=recognizer;
-		sys_U.setListener(new RecognizerFSM.IListener() {
+		sys_U.setInvalidEntryListener(new RecognizerFSM.InvalidEntryListener() {
 			
 			@Override
 			public void onInvalidEntry(AbstractEvent event) {
-				System.out.println("Invalid input for current state "+ sys_U.getFSM().getCurrentState().getName() +" from Listener");
+				// TODO Auto-generated method stub
+				System.out.println("Invalid input for current state "+ sys_U.getFSM().getCurrentState().getName() +" from Listener");				
 			}
+		});
+		
+		sys_U.setUndefinedEntryListener(new RecognizerFSM.UndefinedEntryListener() {
 			
 			@Override
 			public void onUnidentifiedEntry(AbstractEvent event) {
+				// TODO Auto-generated method stub
 				System.out.println("Unidentified input " +event.getName()+" detected at state "+ sys_U.getFSM().getCurrentState().getName()+" reported from Listener");
 				if (event.getName().equalsIgnoreCase("K")) {
 					int delay=5000;
-					onTimer(delay);
-				}
+					sys_U.getTimerListener().onTimer(delay);
+					//onTimer(delay);
+				}				
 			}
+		});
+		
+		sys_U.setTimerListener(new RecognizerFSM.TimerListener() {
 			
-			public void onTimer(final int delay) {
+			@Override
+			public void onTimer(int delay) {
+				// TODO Auto-generated method stub
 				Timer timer=sys_U.getTimer();
 				if (timer==null){
 					timer=new Timer(delay,null);
@@ -46,6 +57,7 @@ public class AListener {
 				});
 				
 				timer.start();
+				
 			}
 		});
 	}

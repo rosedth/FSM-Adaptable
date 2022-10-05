@@ -26,6 +26,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 
 
+/**
+ * @author rosed
+ *
+ */
 public class RecognizerFSM {
 	private FiniteStateMachine fsm;
 	private String path;
@@ -320,44 +324,78 @@ public class RecognizerFSM {
 		return path;
 	}
 	
+	
+	
 	/*
-	 * Additional sensors for required events 
+	 * Additional sensors for required events declared as interfaces:
+	 *   - InvalidEntryListener to act on invalid entry's events
+	 *   - UndefinedEntryListener to act on unidentified entry's events
+	 *   - TimeListener to act on timer events
 	 */	
 	
+
+    public interface InvalidEntryListener {
+        public void onInvalidEntry(AbstractEvent event);
+    }
+    
+    public interface UndefinedEntryListener {
+        public void onUnidentifiedEntry(AbstractEvent event);
+    }
+    
+    public interface TimerListener {
+        public void onTimer(int delay);
+    }
+    
+    
+    private InvalidEntryListener invalidEntryListener=null;
+    private UndefinedEntryListener undefinedEntryListener=null; 
+    private TimerListener timerListener=null;
 	private Timer timer;
 	
+    public InvalidEntryListener getInvalidEntryListener() {
+		return invalidEntryListener;
+	}
+
+	public void setInvalidEntryListener(InvalidEntryListener invalidEntryListener) {
+		this.invalidEntryListener = invalidEntryListener;
+	}
+
+	public UndefinedEntryListener getUndefinedEntryListener() {
+		return undefinedEntryListener;
+	}
+
+	public void setUndefinedEntryListener(UndefinedEntryListener undefinedEntryListener) {
+		this.undefinedEntryListener = undefinedEntryListener;
+	}
+
+	public TimerListener getTimerListener() {
+		return timerListener;
+	}
+
+	public void setTimerListener(TimerListener timerListener) {
+		this.timerListener = timerListener;
+	}
+
 	public Timer getTimer() {
 		return timer;
 	}
 	public void setTimer(Timer timer) {
 		this.timer= timer;
 	}
+
 	
-
-    private IListener listener = null;
-
-    public IListener getListener() {
-    	return this.listener;
-    }
-    public void setListener(IListener listener) {
-        this.listener = listener;
-    }
-
-    public interface IListener {
-        public void onInvalidEntry(AbstractEvent event);
-        public void onUnidentifiedEntry(AbstractEvent event);
-        public void onTimer(int delay);
-    }
-    
-    public void invalidEntry( AbstractEvent e){
-        if (listener != null) 
-            listener.onInvalidEntry(e);
+    /*
+     * Notifying the listeners of each event	
+     */ 
+	
+	public void invalidEntry( AbstractEvent e){
+		if(invalidEntryListener!=null)
+			invalidEntryListener.onInvalidEntry(e);
     }
 
     public void unidentifiedEntry(AbstractEvent e){
-        if (listener != null) 
-            listener.onUnidentifiedEntry(e);
+		if(undefinedEntryListener!=null)
+			undefinedEntryListener.onUnidentifiedEntry(e);
     }    
-    
-
+   
 }
