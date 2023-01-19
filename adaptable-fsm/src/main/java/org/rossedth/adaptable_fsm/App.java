@@ -12,7 +12,7 @@ import org.jeasy.states.api.FiniteStateMachineException;
  * 
  */
 
-class Launcher {
+class App {
 
 	public static void main(String[] args) throws FiniteStateMachineException, IOException {
 
@@ -28,7 +28,7 @@ class Launcher {
 	
 		GraphViz gv = new GraphViz();
 		gv.addln(gv.start_graph());
-		gv.setup_graph("GraphViz.config");
+		gv.setup_graph();
 
         /*
          * Create a AListener instance

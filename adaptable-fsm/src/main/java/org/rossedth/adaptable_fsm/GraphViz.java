@@ -1,11 +1,14 @@
 package org.rossedth.adaptable_fsm;
 
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -46,7 +49,7 @@ public class GraphViz
 	 * Where is your dot program located? It will be called externally.
 	 */
 	private static String DOT        = "dot";
-	private String configs;
+	private String configs="";
 
 	/**
 	 * The source of the graph written in dot language.
@@ -112,6 +115,7 @@ public class GraphViz
 		} catch (java.io.IOException ioe) { return null; }
 	}
 
+	
 	/**
 	 * Writes the graph's image in a file.
 	 * @param img   A byte array containing the image of the graph.
@@ -183,6 +187,21 @@ public class GraphViz
 		return img_stream;
 	}
 
+	
+	public void saveToPNG()
+	{
+		try {
+			Runtime rt = Runtime.getRuntime();
+			String cmd = DOT + " -Tpng FSM.dot -o FSM.png";
+			Process p = rt.exec(cmd);
+
+				p.waitFor();
+			} catch (InterruptedException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
 	/**
 	 * Writes the source of the graph in a file, and returns the written file
 	 * as a File object.
@@ -221,8 +240,20 @@ public class GraphViz
 		return "}";
 	}
 	
-	public void setup_graph(String path) throws IOException{
-		configs=Files.readString(Path.of(path));
+	public void setup_graph() throws IOException{
+		ClassLoader loader=this.getClass().getClassLoader();
+		InputStream is = loader.getResourceAsStream("GraphViz.config");
+		InputStreamReader isr= new InputStreamReader(is); 
+		BufferedReader br = new BufferedReader(isr);
+		String line = br.readLine();
+
+		while (line != null) {
+			configs=configs+line;
+			// read next line
+			line = br.readLine();
+		}
+
+		br.close();
 		graph.append(configs);
 	}
 	public String getConfigurations() {

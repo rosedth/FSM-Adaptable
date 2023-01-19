@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class RecognizerFSM {
 	private String path;
 	private List<FSMEntry> acceptedEntries;
 	private ObjectMapper objectMapper;
-	private File file;
+	private InputStream file;
 	
 	public RecognizerFSM() {
         /*
@@ -121,7 +122,10 @@ public class RecognizerFSM {
          * Load the accepted entries for FSM from JSON
          */
 		objectMapper = new ObjectMapper();
-		file=new File("FSM_Entries.json");
+		ClassLoader loader=this.getClass().getClassLoader();
+		file = loader.getResourceAsStream("FSM_Entries.json");
+
+		//file=new File("FSM_Entries.json");
 		try {
 			load_FSMEntry();
 		} catch (IOException e) {
@@ -217,6 +221,7 @@ public class RecognizerFSM {
 	/*
 	 * Printing methods
 	 */
+	
 
 	//Function to generate a graphical representation of the Automata using GraphViz
 	public void genGraph(GraphViz gv){
@@ -289,11 +294,16 @@ public class RecognizerFSM {
 		gv.addln(gv.end_graph());
 
 		//Print out Digraph
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("FSM.dot"))) {
+		FileWriter dotFile;
+		try {
+			dotFile = new FileWriter("FSM.dot");
+			BufferedWriter writer = new BufferedWriter(dotFile);
 			writer.write(gv.getDotSource());
 			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+			gv.saveToPNG();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		gv.setNewGraph();
 
